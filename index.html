@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zahin Hossain</title>
+<style>
+  :root {
+    --bg: #f7f6f2;
+    --ink: #16150f;
+    --muted: #6b6a60;
+    --line: #d9d7cd;
+    --accent: #9c3b1f;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 72px 28px 120px; }
+
+  header { border-bottom: 2px solid var(--ink); padding-bottom: 28px; margin-bottom: 48px; }
+  h1 { font-size: 40px; line-height: 1.1; margin: 0 0 10px; letter-spacing: -0.5px; }
+  .tagline { font-size: 18px; color: var(--muted); margin: 0 0 20px; max-width: 52ch; }
+  .meta { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px; letter-spacing: 0.02em; color: var(--muted); }
+  .meta a { color: var(--accent); text-decoration: none; }
+  .meta a:hover { text-decoration: underline; }
+
+  section { margin-bottom: 56px; }
+  h2 {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 12px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--muted); margin: 0 0 22px; padding-bottom: 8px; border-bottom: 1px solid var(--line);
+  }
+  h3 { font-size: 19px; margin: 0 0 6px; }
+  p { margin: 0 0 14px; }
+  ul { margin: 0; padding-left: 20px; }
+  li { margin-bottom: 8px; }
+
+  .project { margin-bottom: 34px; }
+  .project:last-child { margin-bottom: 0; }
+  .status {
+    display: inline-block; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+    border: 1px solid var(--line); border-radius: 2px; padding: 1px 6px; margin-bottom: 8px;
+  }
+  .status.live { color: var(--accent); border-color: var(--accent); }
+  .proves { font-size: 15px; color: var(--muted); margin-top: 6px; }
+
+  dl { margin: 0; }
+  dt { font-weight: 600; margin-top: 14px; }
+  dt:first-child { margin-top: 0; }
+  dd { margin: 2px 0 0; color: var(--muted); }
+
+  footer { border-top: 1px solid var(--line); padding-top: 24px; font-size: 14px; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Zahin Hossain</h1>
+    <p class="tagline">Engineering student who builds complete systems, not exercises. CAD, control systems and self-hosted software.</p>
+    <p class="meta">
+      <a href="mailto:zahinhossain9@gmail.com">zahinhossain9@gmail.com</a>
+      &nbsp;/&nbsp; United Kingdom
+    </p>
+  </header>
+
+  <section>
+    <h2>About</h2>
+    <p>I am on a Level 3 engineering programme and I build things end to end: modelling parts and assemblies in Autodesk Inventor, writing Python for control systems and services, and shipping Android apps. Most of what is on this page runs unattended on my own hardware.</p>
+    <p>I care about the point where engineering meets software. I would rather show a working artifact than describe an interest.</p>
+  </section>
+
+  <section>
+    <h2>Looking for</h2>
+    <p>An engineering or software apprenticeship, or a junior role, where hands-on build skill and self-directed work are both valued.</p>
+  </section>
+
+  <section>
+    <h2>Skills</h2>
+    <dl>
+      <dt>CAD and design</dt>
+      <dd>Part and assembly modelling, detail and general-arrangement drawings, parts lists, ISO drawing conventions. Autodesk Inventor.</dd>
+      <dt>Programming</dt>
+      <dd>Python: control-system simulation, data handling, HTTP services, scheduled automation. Java for Android. Comfortable at the command line on Windows and Linux.</dd>
+      <dt>AI and automation</dt>
+      <dd>Speech-to-text and language-model pipelines, browser automation with Playwright, scheduled tasks with logging and status reporting.</dd>
+      <dt>Systems and IT</dt>
+      <dd>Windows and Arch Linux administration, networking across three devices (private mesh, remote access), file sync, backup and recovery.</dd>
+    </dl>
+  </section>
+
+  <section>
+    <h2>Projects</h2>
+
+    <div class="project">
+      <div class="status live">Live</div>
+      <h3>Lecture capture and automatic notes</h3>
+      <p>A delivered client product. Records lectures on a phone, uploads them, transcribes the speech, sorts the audio by topic, writes a titled daily notes document and pushes it back to the phone. Runs unattended every five minutes.</p>
+      <p class="proves">Proves: end-to-end product delivery, audio and speech pipelines, Android plus Python plus backend, shipped to a real user.</p>
+    </div>
+
+    <div class="project">
+      <div class="status live">Live</div>
+      <h3>Voice assistant, self-hosted</h3>
+      <p>Speak a question with headphones in and hear the answer. It answers personal questions from my own notes, does live web lookups, reports my location and routes to it, and writes real reminders from voice commands. Phone captures audio, a PC service transcribes and answers, the reply is spoken back.</p>
+      <p class="proves">Proves: API integration, geocoding and routing, speech in and out, iterating on a system until it genuinely works.</p>
+    </div>
+
+    <div class="project">
+      <div class="status">Built, on device</div>
+      <h3>Resort, a spaced-repetition revision app</h3>
+      <p>An Android app written from scratch. Exam-level cards I authored myself, SM-2 spaced repetition, auto-graded multiple-choice mode, fully offline.</p>
+      <p class="proves">Proves: mobile development, data modelling, interface work, self-directed study tooling.</p>
+    </div>
+
+    <div class="project">
+      <div class="status">Built</div>
+      <h3>Motion-detection camera rig</h3>
+      <p>Computer-vision motion detection with automatic clip recording and a live feed served to a browser page on the local network. Runs as an always-on service.</p>
+      <p class="proves">Proves: computer vision, streaming, a service that stays up.</p>
+    </div>
+
+    <div class="project">
+      <div class="status">In progress</div>
+      <h3>Control systems: PID simulator, then hardware</h3>
+      <p>A dependency-free Python simulation of three mechanical systems (spring-damper, motor, inverted pendulum) with a tunable PID controller, including proportional, integral and derivative terms, anti-windup and settling-time measurement. Built as the first stage before a physical balancing robot on an ESP32.</p>
+      <p class="proves">Proves: applied maths, control theory, simulation before committing to hardware.</p>
+    </div>
+
+    <div class="project">
+      <div class="status">Complete</div>
+      <h3>CAD: multi-part assembly (graded coursework)</h3>
+      <p>A multi-component assembly modelled in Autodesk Inventor, with A3 sheets for the general assembly and every individual part, produced to ISO drawing conventions.</p>
+      <p class="proves">Proves: engineering drawing, tolerances, design for manufacture.</p>
+    </div>
+
+    <div class="project">
+      <div class="status">Complete</div>
+      <h3>Silo designer and structural reports</h3>
+      <p>An offline tool that produces a scale drawing and parts list for a real workshop brief, alongside beam-deflection and stress reports from my maths units.</p>
+      <p class="proves">Proves: turning a brief into a buildable design, applying structural maths.</p>
+    </div>
+
+    <div class="project">
+      <div class="status live">Live</div>
+      <h3>Home infrastructure</h3>
+      <p>A Windows PC and an Arch Linux laptop kept in sync over a private mesh, with a phone as relay: SSH, file synchronisation, remote access, backup and self-healing watchdog scripts.</p>
+      <p class="proves">Proves: systems thinking, networking, automation, keeping things running.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Education</h2>
+    <p>BTEC Level 3 Engineering, Capital City College (in progress). Coursework covers CAD and 3D modelling, manufacturing processes, measurement, workshop practice and health and safety, engineering principles and applied mathematics, with GCSEs including Mathematics, English, Science and Computing.</p>
+  </section>
+
+  <footer>
+    <p>Built by hand. Last updated September 2026.</p>
+  </footer>
+
+</div>
+</body>
+</html>
