@@ -1,7 +1,8 @@
 # portfolio-site
 
-A single self-contained page (`index.html`) describing what I build and what I am looking for.
-No build step, no external assets, no fonts or scripts pulled from third parties, no tracking.
+A single static page (`index.html`) describing what I build and what I am looking for.
+No build step, no fonts or scripts pulled from third parties, no tracking. The only other files
+are the screenshots in `assets/`, served locally alongside the page.
 
 Open `index.html` directly in a browser, or serve it from any static host.
 
