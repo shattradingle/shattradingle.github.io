@@ -7,3 +7,6 @@ index.html|real_name  # "Zahin H." is the deliberate public pseudonym for this s
 index.html|personal_email  # shattradingle@proton.me is the public contact address for the pseudonymous persona, by design
 
 index.html|uk_phone  # Zahin decided 2026-09-23: keep the real mobile public on purpose (recruiters reach him); he accepts the persona->identity link.
+
+.pushguard-allow|real_name  # this exceptions file itself names the deliberate public pseudonym as its reason; nothing beyond what index.html already publishes
+.pushguard-allow|personal_email  # same: the file names the public contact address as its reason
