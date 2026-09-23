@@ -211,20 +211,20 @@
         <div class="status live">Live</div>
         <h3>Lecture capture and automatic notes</h3>
         <p>A recorder runs on my phone through lectures and turns them into finished notes. It uploads in one-minute chunks, transcribes the speech, sorts it by topic, writes a daily document, then sends it back to the phone. The whole pipeline runs unattended as a Windows service.</p>
-        <p class="stats">47 lessons into one document <span>&middot;</span> 12 daily documents so far <span>&middot;</span> ~91% transcription accuracy</p>
+        <p class="stats">47 lessons into one document <span>&middot;</span> 13 daily documents so far <span>&middot;</span> ~91% transcription accuracy</p>
         <p class="note">I built the phone app, the transcription service, and the document pipeline that joins them.</p>
       </div>
     </article>
 
     <article class="card">
       <figure class="card-media">
-        <img src="assets/sync.webp" alt="The Sync app on Android: a record button, an assistant toggle, location sharing, and a status line reading 'PC server: reachable'.">
+        <img src="assets/sync.webp" alt="The Sync app on Android: a status card with Standby, Record and Session controls, and tiles for live notes, the assistant, location and settings.">
       </figure>
       <div class="card-body">
         <div class="status live">Live</div>
         <h3>Voice assistant, self-hosted</h3>
         <p>Ask a question with headphones in and hear the answer. It answers personal questions from my own notes, does live web lookups, reports my location and routes to it, and turns voice commands into reminders. The phone captures the audio, a service on my PC transcribes and answers, and the reply is spoken back.</p>
-        <p class="stats">778 logged exchanges <span>&middot;</span> ~1 second to answer <span>&middot;</span> speech in and out</p>
+        <p class="stats">5,700+ logged exchanges <span>&middot;</span> ~1 second to answer <span>&middot;</span> speech in and out</p>
         <p class="note">The tricky part was getting speech, lookups and my own notes to work together fast enough to be useful.</p>
       </div>
     </article>
@@ -237,8 +237,21 @@
         <div class="status">Built and in use</div>
         <h3>Resort, a spaced-repetition revision app</h3>
         <p>An Android app written from scratch for exam revision. I wrote all the card content myself: exam-level cards, spaced repetition on the SM-2 algorithm, an auto-graded multiple-choice mode, and full offline use.</p>
-        <p class="stats">607 cards across 13 decks <span>&middot;</span> 492 auto-graded questions <span>&middot;</span> fully offline</p>
+        <p class="stats">991 cards across 17 decks <span>&middot;</span> 748 auto-graded questions <span>&middot;</span> fully offline</p>
         <p class="note">The app and all the card content are mine.</p>
+      </div>
+    </article>
+
+    <article class="card">
+      <figure class="card-media">
+        <img src="assets/notes.webp" alt="The Notes app on Android: capture tabs for notes, reminders, ask and dump, a compose box, and tag filters.">
+      </figure>
+      <div class="card-body">
+        <div class="status">Built and in use</div>
+        <h3>Notes, a capture app that files itself</h3>
+        <p>A notes app for my phone, built because nothing else captured the way I think. I type one line and it files itself: rules first, a language model for the rest. Photos get read for their text, edits keep their history, and sensitive notes hide behind a PIN.</p>
+        <p class="stats">43 notes in its first week <span>&middot;</span> v2.32 <span>&middot;</span> auto-tags, OCR, version history</p>
+        <p class="note">The app, the server and the sorting logic are all mine.</p>
       </div>
     </article>
   </section>
@@ -264,7 +277,15 @@
       </div>
       <div class="mini">
         <h3>Home infrastructure</h3>
-        <p>A Windows PC and an Arch Linux laptop kept in sync over a private mesh, running 21 scheduled tasks, with remote access, file sync, backup, and watchdog scripts that repair the setup when something breaks.</p>
+        <p>A Windows PC and an Arch Linux laptop kept in sync over a private mesh, running 44 scheduled tasks, with remote access, file sync, backup, and watchdog scripts that repair the setup when something breaks.</p>
+      </div>
+      <div class="mini">
+        <h3>Fuel, calorie tracker</h3>
+        <p>An Android tracker: scan a barcode and the nutrition lands in today's total, photograph a label when there isn't one, one-tap meals for the regulars, and a home-screen widget.</p>
+      </div>
+      <div class="mini">
+        <h3>Agenda, week calendar</h3>
+        <p>A week-view calendar with natural-language entry: type "dentist tomorrow 3pm" and it parses the day and time. Reads and writes the same reminder store my assistant uses, and keeps working offline.</p>
       </div>
     </div>
   </section>
@@ -306,7 +327,7 @@
   </section>
 
   <footer>
-    <p>Last updated September 2026.</p>
+    <p>Last updated 23 September 2026.</p>
   </footer>
 
 </div>

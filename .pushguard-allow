@@ -1,0 +1,9 @@
+# push_guard exceptions for this repo.
+# One per line: `rule-name`, `path`, or `path|rule-name`; `#` starts a reason.
+# Every exception needs a reason. Delete a line to re-enable the check.
+
+index.html|real_name  # "Zahin H." is the deliberate public pseudonym for this site (first name only, chosen by Zahin)
+
+index.html|personal_email  # shattradingle@proton.me is the public contact address for the pseudonymous persona, by design
+
+index.html|uk_phone  # Zahin decided 2026-09-23: keep the real mobile public on purpose (recruiters reach him); he accepts the persona->identity link.
