@@ -245,7 +245,7 @@
         <div class="status">Built and in use</div>
         <h3>Zero, my assistant's own app</h3>
         <p>The self-hosted assistant split into a dedicated Android app: a live dashboard, an ask-anything box, and an "Inside Zero" screen for its own limits, reports and an undo for anything it changed. The phone is the window; the assistant and everything it knows run on my own machines.</p>
-        <p class="stats">v1.48 <span>&middot;</span> dashboard, ask box, voice controls</p>
+        <p class="stats">v1.50 <span>&middot;</span> dashboard, ask box, voice controls</p>
         <p class="note">The app and the service behind it are mine.</p>
       </div>
     </article>
@@ -275,6 +275,19 @@
         <p class="note">The app, the server and the sorting logic are all mine.</p>
       </div>
     </article>
+
+    <article class="card">
+      <figure class="card-media">
+        <img src="assets/nfc.webp" alt="A live status page served from my PC: devices seen, a running count of 1,549 NFC taps, and a scrolling list of tag UIDs with the label each one is mapped to.">
+      </figure>
+      <div class="card-body">
+        <div class="status">Built and in use</div>
+        <h3>ESP32 NFC reader, wired and running</h3>
+        <p>An ESP32 board with an NFC reader wired over I2C. I wrote the firmware: boot-time self-tests, retry logic, and a reader that prints a tag's UID the moment it is tapped. The taps stream to a small always-on service on my PC and land on a live page I open on my phone. One fob marks going to bed, another marks waking up, and the night is logged.</p>
+        <p class="stats">1,500+ taps logged <span>&middot;</span> boot-time self-tests <span>&middot;</span> always-on service</p>
+        <p class="note">The firmware, the wiring and the service are all mine.</p>
+      </div>
+    </article>
   </section>
 
   <section id="projects">
@@ -287,10 +300,6 @@
       <div class="mini">
         <h3>Control systems: PID simulator</h3>
         <p>A dependency-free Python simulation of a spring-damper, a motor and an inverted pendulum, with a tunable PID controller and settling-time measurement. Stage one before a physical balancing robot on an ESP32.</p>
-      </div>
-      <div class="mini">
-        <h3>ESP32 NFC reader</h3>
-        <p>An ESP32 board with an NFC reader wired over I2C. I wrote the firmware (boot-time self-tests, retry logic) and it runs as a small always-on service: tap one fob to mark going to bed, another to mark waking up, and the night lands in a sleep log I can check from my phone.</p>
       </div>
       <div class="mini">
         <h3>CAD: multi-part assembly</h3>
