@@ -4,9 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Engineering student in the UK building CAD, control systems and self-hosted software. Looking for an engineering or software apprenticeship.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Zahin H. — engineering student">
+<meta property="og:description" content="CAD, control systems and self-hosted software, built end to end and kept running on my own machines.">
+<meta property="og:url" content="https://shattradingle.github.io/">
+<meta property="og:image" content="https://shattradingle.github.io/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#121110">
-<title>Zahin H.</title>
+<title>Zahin H. — engineering student</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23d97a4e'/><text x='16' y='23' font-family='ui-monospace,monospace' font-size='19' font-weight='700' fill='%23121110' text-anchor='middle'>Z</text></svg>">
 <style>
   @font-face {
@@ -224,7 +232,7 @@
         <div class="status live">Live</div>
         <h3>Voice assistant, self-hosted</h3>
         <p>Ask a question with headphones in and hear the answer. It answers personal questions from my own notes, does live web lookups, reports my location and routes to it, and turns voice commands into reminders. The phone captures the audio, a service on my PC transcribes and answers, and the reply is spoken back.</p>
-        <p class="stats">5,700+ logged exchanges <span>&middot;</span> ~1 second to answer <span>&middot;</span> speech in and out</p>
+        <p class="stats">9,700+ logged exchanges <span>&middot;</span> ~1 second to answer <span>&middot;</span> speech in and out</p>
         <p class="note">The tricky part was getting speech, lookups and my own notes to work together fast enough to be useful.</p>
       </div>
     </article>
@@ -236,8 +244,8 @@
       <div class="card-body">
         <div class="status">Built and in use</div>
         <h3>Resort, a spaced-repetition revision app</h3>
-        <p>An Android app written from scratch for exam revision. I wrote all the card content myself: exam-level cards, spaced repetition on the SM-2 algorithm, an auto-graded multiple-choice mode, and full offline use.</p>
-        <p class="stats">991 cards across 17 decks <span>&middot;</span> 748 auto-graded questions <span>&middot;</span> fully offline</p>
+        <p>An Android app written from scratch for exam revision. I wrote all the card content myself: exam-level cards, spaced repetition on the FSRS-6 algorithm, an auto-graded multiple-choice mode, and full offline use.</p>
+        <p class="stats">1,318 cards across 20 decks <span>&middot;</span> 1,020 auto-graded questions <span>&middot;</span> fully offline</p>
         <p class="note">The app and all the card content are mine.</p>
       </div>
     </article>
@@ -250,7 +258,7 @@
         <div class="status">Built and in use</div>
         <h3>Notes, a capture app that files itself</h3>
         <p>A notes app for my phone, built because nothing else captured the way I think. I type one line and it files itself: rules first, a language model for the rest. Photos get read for their text, edits keep their history, and sensitive notes hide behind a PIN.</p>
-        <p class="stats">43 notes in its first week <span>&middot;</span> v2.32 <span>&middot;</span> auto-tags, OCR, version history</p>
+        <p class="stats">v2.38 <span>&middot;</span> auto-tags, OCR, version history</p>
         <p class="note">The app, the server and the sorting logic are all mine.</p>
       </div>
     </article>
@@ -260,6 +268,10 @@
     <h2>More projects</h2>
     <div class="grid">
       <div class="mini">
+        <h3>Zero, my assistant's own app</h3>
+        <p>The self-hosted assistant split into its own Android app: a live dashboard, an ask-anything box, and an "Inside Zero" screen for its own limits, reports and an undo for anything it changed. Version 1.46, shipped most weeks.</p>
+      </div>
+      <div class="mini">
         <h3>Motion-detection camera rig</h3>
         <p>Computer-vision motion detection that records clips on its own and serves a live feed to a browser page on the local network. Runs as an always-on service.</p>
       </div>
@@ -268,16 +280,20 @@
         <p>A dependency-free Python simulation of a spring-damper, a motor and an inverted pendulum, with a tunable PID controller and settling-time measurement. Stage one before a physical balancing robot on an ESP32.</p>
       </div>
       <div class="mini">
+        <h3>ESP32 NFC reader</h3>
+        <p>An ESP32 board with an NFC reader wired over I2C. I wrote the firmware (boot-time self-tests, retry logic) and it runs as a small always-on service: tap one fob to mark going to bed, another to mark waking up, and the night lands in a sleep log I can check from my phone.</p>
+      </div>
+      <div class="mini">
         <h3>CAD: multi-part assembly</h3>
         <p>A multi-part assembly modelled in Autodesk Inventor, with A3 sheets for the general assembly and every part, drawn to ISO conventions.</p>
       </div>
       <div class="mini">
         <h3>Silo designer and structural reports</h3>
-        <p>An offline tool that produces a scale drawing and a parts list for a real workshop brief, used alongside beam-deflection and stress reports from my maths units.</p>
+        <p>An offline tool that produces a scale drawing and a parts list for a real workshop brief, used alongside beam-deflection and stress reports from my maths units. <a class="link" href="silo/">Open the tool</a>.</p>
       </div>
       <div class="mini">
         <h3>Home infrastructure</h3>
-        <p>A Windows PC and an Arch Linux laptop kept in sync over a private mesh, running 44 scheduled tasks, with remote access, file sync, backup, and watchdog scripts that repair the setup when something breaks.</p>
+        <p>A Windows PC and an Arch Linux laptop kept in sync over a private mesh, running 45 scheduled tasks: remote access, file sync, backup, phone photos into a self-hosted timeline, and watchdog scripts that repair the setup when something breaks. There's a small Minecraft server on a cloud box too.</p>
       </div>
       <div class="mini">
         <h3>Fuel, calorie tracker</h3>
@@ -300,6 +316,10 @@
       <div>
         <dt>Programming</dt>
         <dd>Python for control-system simulation, data handling, HTTP services and scheduled automation. Java for Android. Comfortable at the command line on Windows and Linux.</dd>
+      </div>
+      <div>
+        <dt>Electronics and embedded</dt>
+        <dd>ESP32 firmware and serial diagnostics, I2C sensor wiring, boot-time self-tests, soldering. Built and debugged a working NFC reader node from parts.</dd>
       </div>
       <div>
         <dt>AI and automation</dt>
@@ -327,7 +347,7 @@
   </section>
 
   <footer>
-    <p>Last updated 25 September 2026.</p>
+    <p>Last updated 29 September 2026. One static file, no frameworks, no trackers.</p>
   </footer>
 
 </div>

@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SILO//DESIGN — biomass silo workshop tool</title>
+<style>
+  :root{
+    --paper:#efe9dc;
+    --card:#fbf9f3;
+    --ink:#1d1c19;
+    --ink-2:#57534a;
+    --line:#c8c0ae;
+    --line-2:#ddd6c6;
+    --accent:#b0390f;
+    --accent-2:#1c5d4f;
+    --mono:'IBM Plex Mono','SFMono-Regular',Consolas,'Liberation Mono',monospace;
+    --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:14px;
+    line-height:1.4;
+  }
+  header.topbar{
+    display:flex;align-items:center;gap:22px;
+    padding:12px 20px;
+    border-bottom:2px solid var(--ink);
+    background:var(--card);
+    position:sticky;top:0;z-index:20;
+    flex-wrap:wrap;
+  }
+  .brand{font-family:var(--mono);font-weight:700;font-size:19px;letter-spacing:1px}
+  .brand span{color:var(--accent)}
+  .brief{font-size:11px;text-transform:uppercase;letter-spacing:1.4px;color:var(--ink-2)}
+  .presets{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+  .presets button{
+    font-family:var(--mono);font-size:11px;letter-spacing:.5px;
+    background:transparent;border:1px solid var(--line);color:var(--ink-2);
+    padding:5px 9px;cursor:pointer;
+  }
+  .presets button:hover{border-color:var(--ink);color:var(--ink)}
+  /* site-added: link back to the portfolio (this hosted copy only) */
+  a.backlink{
+    font-family:var(--mono);font-size:11px;letter-spacing:.5px;
+    color:var(--ink-2);text-decoration:none;border:1px solid var(--line);
+    padding:5px 9px;white-space:nowrap;
+  }
+  a.backlink:hover{border-color:var(--ink);color:var(--ink)}
+  main{
+    display:grid;
+    grid-template-columns:290px minmax(420px,1fr) 330px;
+    gap:0;
+    min-height:calc(100vh - 54px);
+  }
+  aside{padding:18px 16px;overflow-y:auto;max-height:calc(100vh - 54px)}
+  #controls{border-right:1px solid var(--line)}
+  #results{border-left:1px solid var(--line);background:var(--card)}
+  #stage{padding:16px;display:flex;flex-direction:column;gap:10px;align-items:stretch}
+
+  h2.sec{
+    font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:1.6px;
+    color:var(--ink-2);margin:0 0 10px;padding-top:12px;border-top:2px solid var(--ink);
+  }
+  h2.sec:first-child{padding-top:0;border-top:none}
+  .field{display:grid;grid-template-columns:1fr auto;gap:6px 10px;align-items:center;margin-bottom:9px}
+  .field label{font-size:12.5px;color:var(--ink-2)}
+  .field .val{font-family:var(--mono);font-size:12.5px;text-align:right;min-width:56px}
+  .field input[type=range]{grid-column:1/3;width:100%;accent-color:var(--accent)}
+  .field select,.field input[type=text],.field input[type=number]{
+    grid-column:1/3;width:100%;font-family:var(--mono);font-size:12.5px;
+    padding:5px 6px;border:1px solid var(--line);background:#fff;color:var(--ink);
+  }
+  .seg{display:flex;grid-column:1/3;border:1px solid var(--line)}
+  .seg button{
+    flex:1;background:#fff;border:0;border-right:1px solid var(--line);
+    font-family:var(--mono);font-size:11.5px;padding:6px 2px;cursor:pointer;color:var(--ink-2);
+  }
+  .seg button:last-child{border-right:0}
+  .seg button.on{background:var(--ink);color:#fff}
+  .check{display:flex;align-items:center;gap:8px;margin-bottom:9px;font-size:12.5px;color:var(--ink-2)}
+  .check input{accent-color:var(--accent)}
+
+  .stagehead{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .stagehead .tag{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--ink-2);
+    border:1px solid var(--line);padding:3px 7px;background:var(--card)}
+  .stagehead .grow{flex:1}
+  .btn{
+    font-family:var(--mono);font-size:11.5px;letter-spacing:.5px;
+    background:var(--ink);color:#fff;border:1px solid var(--ink);
+    padding:6px 11px;cursor:pointer;
+  }
+  .btn.ghost{background:transparent;color:var(--ink)}
+  .btn.ghost:hover{background:var(--ink);color:#fff}
+  .btn:active{transform:translateY(1px)}
+
+  #svgwrap{background:#fff;border:1px solid var(--ink);position:relative}
+  svg#draw{display:block;width:100%;height:auto}
+
+  .stat{border-top:2px solid var(--ink);padding:10px 0}
+  .stat .k{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:1.2px;color:var(--ink-2)}
+  .stat .v{font-family:var(--mono);font-size:26px;font-weight:700;line-height:1.1;margin-top:2px}
+  .stat .u{font-size:13px;color:var(--ink-2);margin-left:3px;font-weight:400}
+  .stat .sub{font-size:11.5px;color:var(--ink-2);margin-top:3px}
+  .stat.good .v{color:var(--accent-2)}
+  .stat.warn .v{color:var(--accent)}
+
+  .scorebar{height:8px;background:var(--line-2);margin-top:6px;display:flex}
+  .scorebar i{display:block;height:100%}
+  .scoregrid{display:grid;grid-template-columns:1fr auto;gap:3px 8px;font-family:var(--mono);font-size:11.5px;margin-top:8px}
+  .scoregrid .lab{color:var(--ink-2)}
+  .scoregrid .num{text-align:right}
+  .tot{display:flex;justify-content:space-between;font-family:var(--mono);font-weight:700;font-size:15px;
+    border-top:1px solid var(--line);margin-top:8px;padding-top:6px}
+
+  ul.bom{list-style:none;padding:0;margin:4px 0 0;font-family:var(--mono);font-size:11.5px}
+  ul.bom li{display:flex;justify-content:space-between;gap:8px;padding:4px 0;border-bottom:1px dotted var(--line-2)}
+  ul.bom li span:last-child{color:var(--ink-2);white-space:nowrap}
+
+  .listhead{display:flex;align-items:center;justify-content:space-between;border-top:2px solid var(--ink);padding-top:10px}
+  .subline{font-family:var(--mono);font-size:11px;color:var(--ink-2);margin:5px 0 8px}
+  table.bomt{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:11.5px}
+  table.bomt th{text-align:left;font-size:9.5px;text-transform:uppercase;letter-spacing:.8px;color:var(--ink-2);border-bottom:1.5px solid var(--ink);padding:3px}
+  table.bomt td{padding:5px 3px;border-bottom:1px dotted var(--line-2);vertical-align:top}
+  table.bomt td.r,table.bomt th.r{text-align:right;white-space:nowrap}
+  table.bomt td:first-child{color:var(--ink-2);width:16px}
+  table.bomt td:nth-child(2){font-weight:700}
+  table.bomt td:nth-child(3){color:var(--ink-2)}
+  table.bomt td .mi{display:block;font-size:10px;color:var(--ink-2);font-weight:400}
+  table.bomt tfoot td{border-top:1.5px solid var(--ink);border-bottom:none;font-weight:700;padding-top:7px;font-size:12.5px}
+  .note{font-size:11.5px;color:var(--ink-2);margin:8px 0 0}
+  .note b{color:var(--ink)}
+
+  .verdict{font-size:13px;border:1px solid var(--line);background:#fff;padding:10px;margin-top:8px}
+  .verdict b{font-family:var(--mono)}
+
+  footer.small{font-family:var(--mono);font-size:10.5px;color:var(--ink-2);padding:0 20px 18px}
+  @media (max-width:1080px){
+    main{grid-template-columns:1fr}
+    aside,#stage{max-height:none;border:none;border-bottom:1px solid var(--line)}
+    #results{border-left:none}
+  }
+  @media print{
+    header.topbar,#controls,.stagehead,.no-print{display:none}
+    main{display:block}
+    #svgwrap{border:1px solid #000;margin-bottom:16px}
+    #results{border:none;background:#fff}
+    aside{max-height:none;overflow:visible}
+    body{background:#fff}
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">SILO<span>//</span>DESIGN</div>
+  <div class="brief">ABP · Drax biomass silo — workshop build tool</div>
+  <div class="presets">
+    <button data-preset="quick">Quick 4-leg</button>
+    <button data-preset="tall">Tall tube</button>
+    <button data-preset="stable">Wide &amp; stable</button>
+    <button data-preset="win">Bonus-hunter</button>
+  </div>
+  <a class="backlink" href="../">&larr; Zahin H.</a>
+</header>
+
+<main>
+  <aside id="controls">
+    <h2 class="sec">Structure</h2>
+    <div class="field">
+      <label>Frame type</label>
+      <div class="seg" id="segType">
+        <button data-v="framed" class="on">Framed tower</button>
+        <button data-v="tube">Tube core</button>
+      </div>
+    </div>
+    <div class="field" id="fLegs">
+      <label>Number of legs</label>
+      <div class="seg" id="segLegs">
+        <button data-v="3">3</button>
+        <button data-v="4" class="on">4</button>
+        <button data-v="6">6</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>Height</label><div class="val"><span id="vH">70</span> cm</div>
+      <input type="range" id="H" min="40" max="150" step="1" value="70">
+    </div>
+    <div class="field">
+      <label>Base width</label><div class="val"><span id="vB">20</span> cm</div>
+      <input type="range" id="B" min="6" max="60" step="1" value="20">
+    </div>
+    <div class="field" id="fT">
+      <label>Top width</label><div class="val"><span id="vT">12</span> cm</div>
+      <input type="range" id="T" min="4" max="60" step="1" value="12">
+    </div>
+    <div class="field" id="fD">
+      <label>Tube diameter</label><div class="val"><span id="vD">14</span> cm</div>
+      <input type="range" id="D" min="4" max="40" step="1" value="14">
+    </div>
+    <div class="field" id="fBrace">
+      <label>Bracing</label>
+      <div class="seg" id="segBrace">
+        <button data-v="none">None</button>
+        <button data-v="rings">Rings</button>
+        <button data-v="x" class="on">X-brace</button>
+      </div>
+    </div>
+    <div class="field" id="fSpacing">
+      <label>Brace spacing</label><div class="val"><span id="vSp">20</span> cm</div>
+      <input type="range" id="spacing" min="5" max="60" step="1" value="20">
+    </div>
+
+    <h2 class="sec">Materials</h2>
+    <div class="field">
+      <label>Frame / leg material</label>
+      <select id="legMat"></select>
+    </div>
+    <div class="field">
+      <label>Bracing material</label>
+      <select id="braceMat"></select>
+    </div>
+    <label class="check"><input type="checkbox" id="skin"> Wrap in card skin (adds mass + wind area)</label>
+
+    <h2 class="sec">Extras</h2>
+    <div class="field">
+      <label>Ramp</label>
+      <div class="seg" id="segRamp">
+        <button data-v="none">None</button>
+        <button data-v="straight">Straight</button>
+        <button data-v="spiral" class="on">Spiral</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>Rail car (bonus)</label>
+      <div class="seg" id="segCar">
+        <button data-v="none" class="on">None</button>
+        <button data-v="hoist">Hoist</button>
+        <button data-v="inclined">Inclined</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>Base ballast</label><div class="val"><span id="vBallast">0</span> g</div>
+      <input type="range" id="ballast" min="0" max="500" step="10" value="0">
+    </div>
+
+    <h2 class="sec">Title block</h2>
+    <div class="field">
+      <label>Team / student</label>
+      <input type="text" id="team" placeholder="e.g. Team Turbine">
+    </div>
+  </aside>
+
+  <section id="stage">
+    <div class="stagehead">
+      <span class="tag" id="tagScale">1 cm = 4 px</span>
+      <span class="tag" id="tagGrid">grid = 5 cm</span>
+      <span class="grow"></span>
+      <button class="btn ghost" id="btnPrint">Print drawing</button>
+    </div>
+    <div id="svgwrap">
+      <svg id="draw" viewBox="0 0 560 600" preserveAspectRatio="xMidYMid meet"></svg>
+    </div>
+    <p class="note">Front elevation, left. Plan view, top-right. Dimensions in cm. Copy the outline onto your sheet; use the 5&nbsp;cm grid to keep it to scale.</p>
+  </section>
+
+  <aside id="results">
+    <div class="listhead">
+      <h2 class="sec" style="border:none;padding:0;margin:0">Shopping list</h2>
+      <button class="btn ghost no-print" id="btnPrintList">Print list</button>
+    </div>
+    <div class="subline" id="listSpec">—</div>
+    <table class="bomt">
+      <thead><tr><th>#</th><th>Item</th><th>Material</th><th>Qty</th><th class="r">Mass</th></tr></thead>
+      <tbody id="bom"></tbody>
+      <tfoot><tr><td colspan="4">Total material</td><td class="r"><span id="bomTotal">0</span> g</td></tr></tfoot>
+    </table>
+    <p class="note" id="bomNote"></p>
+
+    <h2 class="sec" style="margin-top:16px">Predicted test results</h2>
+    <div class="stat" id="sMass">
+      <div class="k">Structure mass</div>
+      <div class="v"><span id="rMass">—</span><span class="u">g</span></div>
+      <div class="sub" id="rMassSub">frame only</div>
+    </div>
+    <div class="stat" id="sLoad">
+      <div class="k">Max top load</div>
+      <div class="v"><span id="rLoad">—</span><span class="u">kg</span></div>
+      <div class="sub" id="rLoadSub">before legs buckle</div>
+    </div>
+    <div class="stat" id="sWind">
+      <div class="k">Blow-over wind</div>
+      <div class="v"><span id="rWind">—</span><span class="u">m/s</span></div>
+      <div class="sub" id="rWindSub">empty structure</div>
+    </div>
+
+    <h2 class="sec" style="margin-top:16px">Design score</h2>
+    <div class="scorebar" id="scorebar"></div>
+    <div class="scoregrid" id="scoregrid"></div>
+    <div class="tot"><span>TOTAL</span><span id="scoreTotal">0</span></div>
+
+    <h2 class="sec" style="margin-top:16px">Build notes</h2>
+    <div class="verdict" id="verdict">—</div>
+    <div style="display:flex;gap:6px;margin-top:10px" class="no-print">
+      <button class="btn ghost" id="btnCopy">Copy shopping list</button>
+      <button class="btn ghost" id="btnReset">Reset</button>
+    </div>
+  </aside>
+</main>
+
+<footer class="small">
+  Estimates use Euler column buckling + wind overturning with assumed material properties — treat as a guide for a paper/card model, not a certificate. Verify against your materials sheet.
+</footer>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------------- material catalog ----------------
+   Units: mm, N/mm^2 (MPa), kg/m^3. mPerM in g/m. */
+const MAT = {
+  straw:  {label:"Paper straw Ø6mm",       kind:"tube",  D:6,  wall:0.35, E:3000,  rho:750,  stock:200,  note:"bends easily, cheap"},
+  skewer: {label:"Wooden skewer Ø3mm",    kind:"solid", D:3,             E:11000, rho:600,  stock:300,  note:"stiff in compression"},
+  lolly:  {label:"Lolly stick 10×2mm",    kind:"rect",  b:10, h:2,       E:9000,  rho:650,  stock:114,  note:"flat, good for braces"},
+  dowel:  {label:"Dowel Ø6mm",            kind:"solid", D:6,             E:10000, rho:650,  stock:900,  note:"strong, heavier"},
+  tube:   {label:"Card tube Ø30×2mm",     kind:"tube",  D:30, wall:2,    E:1400,  rho:700,  stock:600,  note:"huge compression"},
+  card:   {label:"Card strip 15×1mm",     kind:"rect",  b:15, h:1,       E:3500,  rho:800,  stock:297,  note:"flexible"}
+};
+const BRACE = {
+  string:{label:"Cotton string", mPerM:1.5},
+  tape:  {label:"Masking tape",  mPerM:4.0},
+  strawb:{label:"Straw (tension)",mPerM:5.0}
+};
+const SKIN_GSM = 230;      // g/m^2 card
+const SHEET_M2 = 0.21*0.297;
+
+function geom(m){
+  if(m.kind==="tube"){const d=m.D-2*m.wall;
+    return {A:Math.PI*(m.D*m.D-d*d)/4, I:Math.PI*(Math.pow(m.D,4)-Math.pow(d,4))/64, width:m.D};}
+  if(m.kind==="solid"){
+    return {A:Math.PI*m.D*m.D/4, I:Math.PI*Math.pow(m.D,4)/64, width:m.D};}
+  // rect: buckling about the weak axis (thickness h)
+  return {A:m.b*m.h, I:m.b*Math.pow(m.h,3)/12, width:Math.max(m.b,m.h)};
+}
+for(const k in MAT){const g=geom(MAT[k]); MAT[k].g=g;
+  MAT[k].mPerM = g.A*MAT[k].rho/1000; // g/m
+}
+
+/* ---------------- state ---------------- */
+const S = {
+  type:"framed", legs:4, H:70, B:20, T:12, D:14,
+  brace:"x", spacing:20, legMat:"straw", braceMat:"string",
+  skin:false, ramp:"spiral", car:"none", ballast:0, team:""
+};
+const LS_KEY="silo_design_v1";
+
+/* ---------------- UI wiring ---------------- */
+const $=id=>document.getElementById(id);
+const segs={segType:"type",segLegs:"legs",segBrace:"brace",segRamp:"ramp",segCar:"car"};
+function bindSeg(id,key,cast){
+  $(id).addEventListener("click",e=>{
+    const b=e.target.closest("button"); if(!b)return;
+    $(id).querySelectorAll("button").forEach(x=>x.classList.remove("on"));
+    b.classList.add("on");
+    S[key]= cast? cast(b.dataset.v): b.dataset.v;
+    if(key==="type") syncVisibility();
+    render();
+  });
+}
+bindSeg("segType","type"); bindSeg("segLegs","legs",Number);
+bindSeg("segBrace","brace"); bindSeg("segRamp","ramp"); bindSeg("segCar","car");
+
+["H","B","T","D","spacing","ballast"].forEach(id=>{
+  $(id).addEventListener("input",()=>{ S[id]=+$(id).value; render(); });
+});
+["skin"].forEach(id=>$(id).addEventListener("change",()=>{S[id]=$(id).checked;render();}));
+["legMat","braceMat"].forEach(id=>$(id).addEventListener("change",()=>{S[id]=$(id).value;render();}));
+$("team").addEventListener("input",()=>{S.team=$("team").value;render();});
+
+// populate selects
+for(const k in MAT){const o=document.createElement("option");o.value=k;o.textContent=MAT[k].label;$("legMat").appendChild(o);}
+$("legMat").value=S.legMat;
+for(const k in BRACE){const o=document.createElement("option");o.value=k;o.textContent=BRACE[k].label;$("braceMat").appendChild(o);}
+$("braceMat").value=S.braceMat;
+
+function syncVisibility(){
+  const framed = S.type==="framed";
+  $("fLegs").style.display = framed?"":"none";
+  $("fT").style.display = framed?"":"none";
+  $("fD").style.display = framed?"none":"";
+  $("fBrace").style.display = framed?"":"none";
+  $("fSpacing").style.display = (framed && S.brace!=="none")?"":"none";
+  // tube uses bracing in its own right
+}
+
+/* ---------------- physics ---------------- */
+function compute(){
+  const mat=MAT[S.legMat];
+  const H=S.H, framed=S.type==="framed";
+  const trackSpacing = (S.brace==="none")?H:Math.min(H,S.spacing); // cm
+
+  let nLegs, legLenCm, baseW, topW, widthMid, planW;
+  if(framed){
+    nLegs=S.legs; baseW=S.B; topW=S.T; widthMid=(S.B+S.T)/2;
+    legLenCm=Math.sqrt(H*H + Math.pow((S.B-S.T)/2,2));
+    planW=S.B;
+  }else{
+    nLegs=1; baseW=S.D; topW=S.D; widthMid=S.D;
+    legLenCm=H; planW=S.D;
+  }
+
+  const LeCm = Math.min(legLenCm, trackSpacing);      // effective buckling length
+  const Le=LeCm*10;                                    // mm
+  const Pcr = Math.pow(Math.PI,2)*mat.E*mat.g.I/(Le*Le); // N per member
+  const braceEff = (S.brace==="none")?0.42:0.70;
+  const capN = nLegs*Pcr*braceEff;
+
+  // ---- masses (g) ----
+  let legsG = nLegs*(legLenCm/100)*mat.mPerM;
+  const bays = Math.max(1,Math.round(H/trackSpacing));
+  let braceG=0, braceLenCm=0, braceFaces=0;
+  if(S.brace!=="none"){
+    if(S.brace==="rings"){
+      const ring = (framed? Math.PI*widthMid : Math.PI*S.D);
+      braceLenCm = bays*ring;
+    }else{
+      braceFaces = framed? nLegs : 4;
+      const side = framed? widthMid : S.D;
+      const diag = Math.sqrt(S.spacing*S.spacing + side*side);
+      braceLenCm = bays*braceFaces*2*diag;
+    }
+    braceG = (braceLenCm/100)*BRACE[S.braceMat].mPerM;
+  }
+  const perim = framed? (nLegs*Math.sin(Math.PI/nLegs)*widthMid) : Math.PI*S.D; // used only for skin approx
+  const skinAreaM2 = (Math.PI*widthMid*H)/10000;
+  let skinG = S.skin? skinAreaM2*SKIN_GSM : 0;
+
+  let rampG=0, rampAreaM2=0;
+  if(S.ramp==="straight"){ rampG=12; rampAreaM2=0.03; }
+  if(S.ramp==="spiral"){ rampG=26; rampAreaM2=0.05; }
+  let carG = S.car==="none"?0 : (S.car==="hoist"?10:16);
+
+  const structG = legsG+braceG+skinG+rampG+carG;
+  const structKg = structG/1000;
+  const ballastKg = S.ballast/1000;
+
+  // ---- load capacity ----
+  const capKg = capN/9.81;
+  const maxTop = Math.max(0, capKg - structKg);
+
+  // ---- wind / overturning ----
+  const Cd = framed?1.3:0.8;
+  const Aproj = (H/100)*((framed?widthMid:S.D)/100) + rampAreaM2 + (S.skin?0:0);
+  const halfBase = (framed? S.B : S.D)/200; // m
+  const Mrestore = (structKg+ballastKg)*9.81*halfBase;
+  function vCrit(extraKg){
+    const Mw = Mrestore + extraKg*9.81*halfBase;
+    const denom = 0.5*1.225*Cd*Aproj*(H/200);
+    return Math.sqrt(Math.max(0,Mw)/Math.max(0.0001,denom));
+  }
+  const windEmpty = vCrit(0);
+  const windLoaded = vCrit(Math.min(maxTop, 5)); // capped display
+
+  // ---- bill of materials ----
+  const bom=[];
+  const legTotalCm=Math.round(nLegs*legLenCm);
+  const legPieces=Math.ceil(nLegs*legLenCm*10/mat.stock);
+  bom.push({item: framed?("Legs ×"+nLegs):"Core tube", material: mat.label,
+            qty: legPieces+" × "+(mat.stock/10)+" cm", len: legTotalCm+" cm", mass: legsG, note: mat.note});
+  if(S.brace!=="none"){
+    const label = S.brace==="rings"?"Brace rings":"X-braces";
+    const bm = BRACE[S.braceMat];
+    bom.push({item:label+" ("+bays+" bays)", material: bm.label,
+      qty: braceLenCm>=100? (braceLenCm/100).toFixed(1)+" m" : Math.round(braceLenCm)+" cm",
+      len: Math.round(braceLenCm)+" cm", mass: braceG, note: S.braceMat==="strawb"?"in tension only":"tie at every joint"});
+  }
+  if(S.skin) bom.push({item:"Silo skin", material:"A4 card "+SKIN_GSM+"gsm", qty: Math.ceil(skinAreaM2/SHEET_M2)+" sheet", len:skinAreaM2.toFixed(2)+" m²", mass: skinG, note:"wrap + tape to legs"});
+  if(S.ramp!=="none") bom.push({item:S.ramp+" ramp", material:"card / card strip", qty:(S.ramp==="spiral"?"5–6 rails":"1 ramp + 2 supports"), len:"—", mass:rampG, note:"glue to the outside of the frame"});
+  if(S.car!=="none") bom.push({item:"Rail car", material:S.car==="hoist"?"string + small box":"card cart + straw rails", qty:"1", len:"—", mass:carG, note:S.car==="hoist"?"pulley at the top":"bonus: runs on the ramp"});
+  bom.push({item:"Fixings", material:"masking tape / PVA", qty:"1 roll", len:"—", mass:0, note:"allow ~1 roll"});
+  if(S.ballast>0) bom.push({item:"Base ballast", material:"coins / sand", qty:S.ballast+" g", len:"—", mass:S.ballast, note:"tape into the base"});
+  const bomMass = bom.reduce((a,b)=>a+b.mass,0);
+
+  // ---- score ----
+  const heightPts = Math.round(Math.max(0,H-60)*1.0);
+  const loadPts   = Math.round(Math.min(120, maxTop*40));
+  const windPts   = Math.round(Math.min(120, windEmpty*2.2));
+  const rampPts   = S.ramp==="none"?0:15;
+  const carPts    = S.car==="none"?0:25;
+  const score = heightPts+loadPts+windPts+rampPts+carPts;
+
+  return {mat,framed,nLegs,legLenCm,baseW,topW,widthMid,planW,
+    LeCm,Pcr,capN,capKg,maxTop,structG,structKg,ballastKg,
+    legsG,braceG,skinG,rampG,carG,braceLenCm,bays:Math.max(1,Math.round(H/trackSpacing)),
+    Aproj,Cd,windEmpty,windLoaded,bom,bomMass,score,
+    parts:{heightPts,loadPts,windPts,rampPts,carPts}};
+}
+
+/* ---------------- drawing ---------------- */
+const NS="http://www.w3.org/2000/svg";
+function el(n,attrs){const e=document.createElementNS(NS,n);for(const k in attrs)e.setAttribute(k,attrs[k]);return e;}
+function line(x1,y1,x2,y2,cls,extra){const a={x1,y1,x2,y2};if(cls)a.class=cls;if(extra)Object.assign(a,extra);return el("line",a);}
+function txt(x,y,s,anch,cls,size){const e=el("text",{x,y,"text-anchor":anch||"middle"});if(cls)e.setAttribute("class",cls);e.setAttribute("font-size",size||10);e.textContent=s;return e;}
+
+function draw(R){
+  const svg=$("draw"); svg.innerHTML="";
+  const W=560,Hh=600;
+  svg.appendChild(el("rect",{x:0,y:0,width:W,height:Hh,fill:"#fffdf9"}));
+  const groundY=505;
+  const px = Math.min(4.4, 430/S.H);       // px per cm
+  const cx = 250;                           // tower centre x
+  // grid every 5 cm
+  const gstep=5*px;
+  if(gstep>5){
+    for(let x=cx%gstep;x<W;x+=gstep) svg.appendChild(line(x,40,x,groundY, "gridline",{stroke:"#000"}));
+    for(let y=groundY;y>40;y-=gstep) svg.appendChild(line(20,y,W-20,y,"gridline",{stroke:"#000"}));
+  }
+  // ground
+  svg.appendChild(line(30,groundY,420,groundY,"ink",{stroke:"#000","stroke-width":2}));
+  // title block
+  const tb=el("g",{}); 
+  tb.appendChild(el("rect",{x:330,y:520,width:215,height:66,fill:"none",stroke:"#000"}));
+  tb.appendChild(line(330,553,545,553,"ink",{stroke:"#000"}));
+  tb.appendChild(line(330,576,545,576,"ink",{stroke:"#000"}));
+  tb.appendChild(txt(338,538,"BIOMASS SILO", "start","inkb",12));
+  tb.appendChild(txt(338,548,"ABP / DRAX — workshop build","start","inct",8));
+  tb.appendChild(txt(338,567,"SCALE", "start","inct",7)); tb.appendChild(txt(400,567,"1:10 (grid 5cm)","start","inck",8));
+  tb.appendChild(txt(338,571,"","start"));
+  tb.appendChild(txt(338,590,"DATE", "start","inct",7)); tb.appendChild(txt(400,590,new Date().toISOString().slice(0,10),"start","inck",8));
+  tb.appendChild(txt(490,590,"TEAM", "start","inct",7));
+  tb.appendChild(txt(522,590,(S.team||"—").slice(0,10),"start","inck",8));
+  svg.appendChild(tb);
+  // plan view
+  const pvx=462, pvy=110, pvr=Math.max(14, Math.min(52, R.planW*px*0.5));
+  svg.appendChild(el("rect",{x:400,y:34,width:124,height:150,fill:"none",stroke:"#000"}));
+  svg.appendChild(txt(462,48,"PLAN","middle","inck",9));
+  svg.appendChild(el("circle",{cx:pvx,cy:pvy,r:pvr,fill:"none",stroke:"#000"}));
+  const angles=[];
+  for(let i=0;i<R.nLegs;i++) angles.push((i/R.nLegs)*Math.PI*2 - Math.PI/2);
+  angles.forEach(a=>{
+    svg.appendChild(el("circle",{cx:pvx+Math.cos(a)*pvr,cy:pvy+Math.sin(a)*pvr,r:2.4,fill:"#000"}));
+  });
+  if(S.brace==="rings") svg.appendChild(el("circle",{cx:pvx,cy:pvy,r:pvr*0.6,fill:"none",stroke:"#000","stroke-dasharray":"3 3"}));
+  svg.appendChild(txt(pvx,pvy+pvr+18,"diam "+Math.round(R.baseW)+" cm","middle","inct",8));
+
+  // ramp (behind)
+  const rampTopY = groundY - S.H*px*(S.ramp==="spiral"?0.85:0.6);
+  if(S.ramp==="straight"){
+    svg.appendChild(line(cx+ (R.baseW/2)*px, groundY, cx+(R.baseW/2)*px + 90, rampTopY, "thin",{stroke:"#000"}));
+    svg.appendChild(line(cx+(R.baseW/2)*px + 90, rampTopY, cx+30, rampTopY, "thin",{stroke:"#000"}));
+  }else if(S.ramp==="spiral"){
+    for(let i=0;i<5;i++){
+      const yy=groundY-10-i*((groundY-rampTopY-20)/5);
+      svg.appendChild(el("ellipse",{cx,cy:yy,rx:(R.baseW/2)*px+8,ry:8,fill:"none",stroke:"#000","stroke-width":0.8,"stroke-dasharray":"2 2"}));
+    }
+  }
+  // legs (back first)
+  const legX = (half)=>{ // returns array of {x, depth}
+    return angles.map(a=>({x:cx+Math.cos(a)*half*px, depth:Math.sin(a)}));
+  };
+  const basePts=legX(R.baseW/2), topPts=legX(R.topW/2);
+  const order=basePts.map((p,i)=>i).sort((a,b)=>basePts[a].depth-basePts[b].depth);
+  order.forEach(i=>{
+    const back=basePts[i].depth<0;
+    svg.appendChild(line(basePts[i].x,groundY, topPts[i].x, groundY-R.legLenCm*px,
+      "leg", {stroke: back?"#7a7364":"#000","stroke-width": back?1.4:2.4}));
+  });
+  // bracing
+  if(S.brace!=="none"){
+    const bays=R.bays;
+    if(S.brace==="rings"){
+      for(let b=1;b<=bays;b++){
+        const fy=groundY-(b/bays)*R.legLenCm*px*0.98;
+        const half=(R.baseW + (R.topW-R.baseW)*(b/bays))/2;
+        svg.appendChild(el("ellipse",{cx,cy:fy,rx:half*px,ry:5,fill:"none",stroke:"#000","stroke-width":0.8}));
+      }
+    }else{
+      for(let b=0;b<bays;b++){
+        const f0=groundY-(b/bays)*R.legLenCm*px;
+        const f1=groundY-((b+1)/bays)*R.legLenCm*px;
+        const h0=((R.baseW+(R.topW-R.baseW)*(b/bays))/2)*px;
+        const h1=((R.baseW+(R.topW-R.baseW)*((b+1)/bays))/2)*px;
+        svg.appendChild(line(cx-h0,f0,cx+h1,f1,"thin",{stroke:"#000"}));
+        svg.appendChild(line(cx+h0,f0,cx-h1,f1,"thin",{stroke:"#000"}));
+      }
+    }
+  }
+  // skin
+  if(S.skin){
+    const wTop=R.topW/2*px, wBase=R.baseW/2*px;
+    svg.appendChild(el("polygon",{points:`${cx-wBase},${groundY} ${cx+wBase},${groundY} ${cx+wTop},${groundY-R.legLenCm*px} ${cx-wTop},${groundY-R.legLenCm*px}`,
+      fill:"rgba(0,0,0,0.05)",stroke:"#000","stroke-width":0.6,"stroke-dasharray":"4 2"}));
+  }
+  // silo cap
+  svg.appendChild(el("ellipse",{cx,cy:groundY-R.legLenCm*px,rx:(R.topW/2)*px,ry:6,fill:"#fff",stroke:"#000"}));
+  // rail car
+  if(S.car!=="none"){
+    const capY=groundY-R.legLenCm*px;
+    svg.appendChild(line(cx,capY, cx+70,capY-30,"thin",{stroke:"#000"}));
+    svg.appendChild(el("rect",{x:cx+62,y:capY-40,width:20,height:12,fill:"#000"}));
+    if(S.car==="inclined") svg.appendChild(el("rect",{x:cx+40,y:rampTopY-10,width:22,height:11,fill:"#000"}));
+  }
+  // dimension: height (left)
+  const hx=70;
+  svg.appendChild(line(hx,groundY,hx,groundY-R.legLenCm*px,"dim",{stroke:"#b0390f"}));
+  const htxt=txt(hx-4,groundY-R.legLenCm*px/2, Math.round(R.legLenCm)+" cm", "middle","accent",11);
+  htxt.setAttribute("transform",`rotate(-90 ${hx-4} ${groundY-R.legLenCm*px/2})`);
+  svg.appendChild(htxt);
+  // base width
+  svg.appendChild(line(cx-R.baseW/2*px,groundY+16,cx+R.baseW/2*px,groundY+16,"dim",{stroke:"#b0390f"}));
+  svg.appendChild(txt(cx,groundY+30,Math.round(R.baseW)+" cm","middle","accent",11));
+  // top width
+  svg.appendChild(line(cx-R.topW/2*px,groundY-R.legLenCm*px-14,cx+R.topW/2*px,groundY-R.legLenCm*px-14,"dim",{stroke:"#b0390f"}));
+  svg.appendChild(txt(cx,groundY-R.legLenCm*px-20,Math.round(R.topW)+" cm","middle","accent",11));
+  // style injected
+  const st=el("style",{});
+  st.textContent=".gridline{opacity:.08;stroke-width:.5}.ink{}.leg{}.thin{stroke-width:.9}.dim{stroke-dasharray:0}.accent{fill:#b0390f;font-family:monospace}.inkb{fill:#000;font-family:monospace;font-weight:700}.inck{fill:#000;font-family:monospace}.inct{fill:#57534a;font-family:monospace;letter-spacing:.5px}";
+  svg.appendChild(st);
+}
+
+/* ---------------- render ---------------- */
+function render(){
+  const R=compute();
+  // header tags
+  $("tagScale").textContent = "front elevation";
+  // readouts
+  $("rMass").textContent = Math.round(R.structG);
+  $("rMassSub").textContent = Math.round(R.legsG)+" legs · "+Math.round(R.braceG)+" brace · "+Math.round(R.skinG)+" skin";
+  $("rLoad").textContent = R.maxTop>=1? R.maxTop.toFixed(1) : (R.maxTop*1000).toFixed(0);
+  $("rLoad").nextElementSibling.textContent = R.maxTop>=1?"kg":"g";
+  $("rLoadSub").textContent = "legs carry ~"+R.capKg.toFixed(1)+" kg before buckling";
+  $("rWind").textContent = R.windEmpty.toFixed(1);
+  $("rWindSub").textContent = "≈ "+ (R.windEmpty*2.237).toFixed(0)+" mph · loaded: "+R.windLoaded.toFixed(1);
+
+  // score
+  const P=R.parts, parts=[["Height ≥60cm",P.heightPts,"#1c5d4f"],["Top load",P.loadPts,"#b0390f"],["Wind",P.windPts,"#2a6db0"],["Ramp",P.rampPts,"#7a5c1e"],["Rail car",P.carPts,"#5c3a86"]];
+  const tot=Math.max(1,parts.reduce((a,b)=>a+b[1],0));
+  const bar=$("scorebar"); bar.innerHTML="";
+  parts.forEach(p=>{const i=document.createElement("i");i.style.width=(p[1]/tot*100)+"%";i.style.background=p[2];bar.appendChild(i);});
+  const sg=$("scoregrid"); sg.innerHTML="";
+  parts.forEach(p=>{const d=document.createElement("div");d.className="lab";d.textContent=p[0];const n=document.createElement("div");n.className="num";n.textContent=p[1];sg.appendChild(d);sg.appendChild(n);});
+  $("scoreTotal").textContent=R.score;
+
+  // shopping list
+  const bom=$("bom"); bom.innerHTML="";
+  R.bom.forEach((r,i)=>{
+    const tr=document.createElement("tr");
+    tr.innerHTML="<td>"+(i+1)+"</td>"
+      +"<td>"+r.item+"<span class='mi'>"+r.note+"</span></td>"
+      +"<td>"+r.material+"</td>"
+      +"<td>"+r.qty+(r.len&&r.len!=="—"?"<span class='mi'>"+r.len+"</span>":"")+"</td>"
+      +"<td class='r'>"+(r.mass>=1?Math.round(r.mass)+" g":"—")+"</td>";
+    bom.appendChild(tr);
+  });
+  $("bomTotal").textContent=Math.round(R.bomMass);
+  const spec=[S.type==="framed"?(R.nLegs+"-leg frame"):"tube core","H "+S.H+" cm","base "+Math.round(R.baseW)+" cm",S.brace+" bracing",(S.ramp!=="none"?S.ramp+" ramp":null),(S.car!=="none"?S.car+" car":null)].filter(Boolean).join(" · ");
+  $("listSpec").textContent = spec;
+  $("bomNote").innerHTML="Total material <b>"+Math.round(R.bomMass)+" g</b>"+(S.ballast>0?" + "+S.ballast+" g ballast":"")+". Hand this list in with the drawing.";
+
+  // verdict
+  const v=[];
+  if(S.H<60) v.push("<b>Too short:</b> brief needs ≥60 cm — raise the height.");
+  else v.push("<b>Height OK</b> ("+Math.round(R.legLenCm)+" cm member length).");
+  if(R.maxTop<0.5) v.push("Weak in compression — use stiffer legs (skewer/dowel) or add rings.");
+  else v.push("Holds about <b>"+R.maxTop.toFixed(1)+" kg</b> on top.");
+  if(R.windEmpty<7) v.push("<b>Easy to blow over</b> — widen the base or add ballast.");
+  else v.push("Resists roughly <b>"+R.windEmpty.toFixed(1)+" m/s</b> wind.");
+  if(S.brace==="none") v.push("No bracing — add rings or X-braces; capacity nearly doubles.");
+  if(S.skin) v.push("Skin adds wind area: use it for looks, brace underneath.");
+  if(S.ramp!=="none"&&S.car!=="none") v.push("<b>Bonus hunter:</b> ramp + rail car both fitted.");
+  $("verdict").innerHTML=v.map(x=>"<div>· "+x+"</div>").join("");
+
+  draw(R);
+  try{localStorage.setItem(LS_KEY,JSON.stringify(S));}catch(e){}
+  syncVisibility();
+}
+
+/* ---------------- presets ---------------- */
+const PRESETS={
+  quick:{type:"framed",legs:4,H:65,B:18,T:16,brace:"x",spacing:22,legMat:"straw",braceMat:"string",skin:false,ramp:"none",car:"none",ballast:0},
+  tall:{type:"tube",H:120,D:16,brace:"rings",spacing:25,legMat:"tube",braceMat:"tape",skin:false,ramp:"spiral",car:"none",ballast:0},
+  stable:{type:"framed",legs:6,H:62,B:40,T:26,brace:"x",spacing:15,legMat:"skewer",braceMat:"string",skin:false,ramp:"none",car:"none",ballast:200},
+  win:{type:"framed",legs:4,H:80,B:26,T:18,brace:"x",spacing:16,legMat:"skewer",braceMat:"string",skin:true,ramp:"spiral",car:"hoist",ballast:120}
+};
+document.querySelectorAll(".presets button").forEach(b=>b.addEventListener("click",()=>{
+  applyState(PRESETS[b.dataset.preset]); render();
+}));
+
+function applyState(st){
+  Object.assign(S,st);
+  // sync controls to state
+  document.querySelectorAll("#segType button").forEach(x=>x.classList.toggle("on",x.dataset.v===S.type));
+  document.querySelectorAll("#segLegs button").forEach(x=>x.classList.toggle("on",+x.dataset.v===S.legs));
+  document.querySelectorAll("#segBrace button").forEach(x=>x.classList.toggle("on",x.dataset.v===S.brace));
+  document.querySelectorAll("#segRamp button").forEach(x=>x.classList.toggle("on",x.dataset.v===S.ramp));
+  document.querySelectorAll("#segCar button").forEach(x=>x.classList.toggle("on",x.dataset.v===S.car));
+  ["H","B","T","D","spacing","ballast"].forEach(id=>{ if(S[id]!=null){$(id).value=S[id]; $("v"+({H:"H",B:"B",T:"T",D:"D",spacing:"Sp",ballast:"Ballast"})[id]).textContent=S[id];} });
+  $("skin").checked=!!S.skin;
+  $("legMat").value=S.legMat; $("braceMat").value=S.braceMat;
+  $("team").value=S.team||"";
+}
+
+/* ---------------- buttons ---------------- */
+$("btnPrint").addEventListener("click",()=>window.print());
+$("btnPrintList").addEventListener("click",()=>window.print());
+$("btnCopy").addEventListener("click",()=>{
+  const R=compute();
+  const spec=[S.type==="framed"?(R.nLegs+"-leg frame"):"tube core","H "+S.H+"cm","base "+Math.round(R.baseW)+"cm",S.brace+" bracing",(S.ramp!=="none"?S.ramp+" ramp":null),(S.car!=="none"?S.car+" car":null)].filter(Boolean).join(" · ");
+  const lines=R.bom.map((r,i)=>(i+1)+". "+r.item+" — "+r.material+" — "+r.qty+(r.len&&r.len!=="—"?" ("+r.len+")":"")+" — "+Math.round(r.mass)+"g").join("\n");
+  const text="BIOMASS SILO — SHOPPING LIST\n"+spec+"\n\n"+lines+"\n\nTotal material "+Math.round(R.bomMass)+"g"
+    +"\nEst. max top load "+R.maxTop.toFixed(1)+" kg · blow-over "+R.windEmpty.toFixed(1)+" m/s";
+  navigator.clipboard.writeText(text).then(()=>{$("btnCopy").textContent="Copied";setTimeout(()=>$("btnCopy").textContent="Copy shopping list",1200);});
+});
+$("btnReset").addEventListener("click",()=>{try{localStorage.removeItem(LS_KEY);}catch(e){}location.reload();});
+
+/* ---------------- live range labels ---------------- */
+["H","B","T","D","spacing","ballast"].forEach(id=>{
+  const map={H:"vH",B:"vB",T:"vT",D:"vD",spacing:"vSp",ballast:"vBallast"};
+  $(id).addEventListener("input",()=>{$(map[id]).textContent=$(id).value;});
+});
+
+/* ---------------- boot ---------------- */
+(function boot(){
+  applyState(S);
+  // restore
+  try{const raw=localStorage.getItem(LS_KEY); if(raw){applyState(JSON.parse(raw));}}catch(e){}
+  ["H","B","T","D","spacing","ballast"].forEach(id=>$("v"+({H:"H",B:"B",T:"T",D:"D",spacing:"Sp",ballast:"Ballast"})[id]).textContent=$(id).value);
+  syncVisibility();
+  render();
+})();
+})();
+</script>
+</body>
+</html>
