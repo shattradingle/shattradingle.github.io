@@ -58,6 +58,7 @@
     -moz-osx-font-smoothing: grayscale;
   }
   img { forced-color-adjust: none; }
+  ::selection { background: var(--accent); color: var(--bg); }
   a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .link { color: var(--accent); text-decoration: none; }
   .link:hover { text-decoration: underline; }
@@ -127,8 +128,9 @@
   .card-media.doc img { width: 100%; height: auto; max-height: none; }
   .card-body { padding: 24px 26px 26px; }
   .card-body p { font-size: 16px; }
-  .stats { font-family: var(--mono); font-size: 12.5px; color: var(--ink); margin: 14px 0 0; line-height: 1.9; }
-  .stats span { color: var(--muted); }
+  .stats { font-family: var(--mono); font-size: 12.5px; color: var(--muted); margin: 14px 0 0; line-height: 1.9; }
+  .stats b { font-weight: 700; color: var(--ink); }
+  .stats span { opacity: 0.5; }
   .note { font-size: 15px; color: var(--muted); margin: 12px 0 0; }
   .card-body .note:last-child { margin-bottom: 0; }
 
@@ -219,7 +221,7 @@
         <div class="status live">Live</div>
         <h3>Lecture notes, written automatically</h3>
         <p>I record lectures on my phone and the notes come back to it without me touching anything. Audio uploads in one-minute chunks, gets transcribed, sorted by topic and folded into a single document for the day. The whole pipeline runs unattended as a service on my PC.</p>
-        <p class="stats">48 lesson recordings into one document <span>&middot;</span> ~91% transcription accuracy <span>&middot;</span> no manual steps</p>
+        <p class="stats"><b>48</b> lesson recordings into one document <span>&middot;</span> <b>~91%</b> transcription accuracy <span>&middot;</span> no manual steps</p>
         <p class="note">I built the Android recorder, the transcription service and the pipeline that joins them.</p>
       </div>
     </article>
@@ -232,7 +234,7 @@
         <div class="status live">Live</div>
         <h3>Voice assistant, self-hosted</h3>
         <p>Ask a question with headphones in and hear the answer. It answers personal questions from my own notes, does live web lookups, translates foreign speech on the fly, reports my location and routes to it, and turns voice commands into reminders. The phone captures the audio, a service on my PC transcribes and answers, and the reply is spoken back.</p>
-        <p class="stats">9,700+ logged exchanges <span>&middot;</span> ~1 second to answer <span>&middot;</span> speech in and out</p>
+        <p class="stats"><b>9,700+</b> logged exchanges <span>&middot;</span> <b>~1 second</b> to answer <span>&middot;</span> speech in and out</p>
         <p class="note">The tricky part was getting speech, lookups and my own notes to work together fast enough to be useful.</p>
       </div>
     </article>
@@ -245,7 +247,7 @@
         <div class="status">Built and in use</div>
         <h3>Zero, my assistant's own app</h3>
         <p>The self-hosted assistant split into a dedicated Android app: a live dashboard, an ask-anything box, and an "Inside Zero" screen for its own limits, reports and an undo for anything it changed. The phone is the window; the assistant and everything it knows run on my own machines.</p>
-        <p class="stats">v1.50 <span>&middot;</span> dashboard, ask box, voice controls</p>
+        <p class="stats"><b>v1.50</b> <span>&middot;</span> dashboard, ask box, voice controls</p>
         <p class="note">The app and the service behind it are mine.</p>
       </div>
     </article>
@@ -258,7 +260,7 @@
         <div class="status">Built and in use</div>
         <h3>Resort, a spaced-repetition revision app</h3>
         <p>An Android app written from scratch for exam revision. I wrote all the card content myself: exam-level cards, spaced repetition on the FSRS-6 algorithm, an auto-graded multiple-choice mode, and full offline use. A lesson timeline pulls the teacher's own topic entries in and shows what is coming next.</p>
-        <p class="stats">1,851 cards across 27 decks <span>&middot;</span> 1,537 auto-graded questions <span>&middot;</span> fully offline</p>
+        <p class="stats"><b>1,851</b> cards across <b>27</b> decks <span>&middot;</span> <b>1,537</b> auto-graded questions <span>&middot;</span> fully offline</p>
         <p class="note">The app and all the card content are mine.</p>
       </div>
     </article>
@@ -271,7 +273,7 @@
         <div class="status">Built and in use</div>
         <h3>Notes, a capture app that files itself</h3>
         <p>A notes app for my phone, built because nothing else captured the way I think. I type one line and it files itself: rules first, a language model for the rest. Photos get read for their text, edits keep their history, and sensitive notes hide behind a PIN.</p>
-        <p class="stats">v2.38 <span>&middot;</span> auto-tags, OCR, version history</p>
+        <p class="stats"><b>v2.38</b> <span>&middot;</span> auto-tags, OCR, version history</p>
         <p class="note">The app, the server and the sorting logic are all mine.</p>
       </div>
     </article>
@@ -284,7 +286,7 @@
         <div class="status">Built and in use</div>
         <h3>ESP32 NFC reader, wired and running</h3>
         <p>An ESP32 board with an NFC reader wired over I2C. I wrote the firmware: boot-time self-tests, retry logic, and a reader that prints a tag's UID the moment it is tapped. The taps stream to a small always-on service on my PC and land on a live page I open on my phone. One fob marks going to bed, another marks waking up, and the night is logged.</p>
-        <p class="stats">1,500+ taps logged <span>&middot;</span> boot-time self-tests <span>&middot;</span> always-on service</p>
+        <p class="stats"><b>1,500+</b> taps logged <span>&middot;</span> boot-time self-tests <span>&middot;</span> always-on service</p>
         <p class="note">The firmware, the wiring and the service are all mine.</p>
       </div>
     </article>
